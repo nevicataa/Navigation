@@ -13,7 +13,7 @@ class InfoViewController: UIViewController {
                 let infoButton = UIButton()
             let image = UIImage(systemName: "ellipsis")
             //infoButton.backgroundColor = .blue
-            //infoButton.layer.cornerRadius = 12
+            //infoButton.layer.cornerRadius = 16
             infoButton.setImage(image, for: .normal)
             infoButton.addTarget(self, action: #selector(alertButtonAction), for: .touchUpInside)
             infoButton.translatesAutoresizingMaskIntoConstraints = false
