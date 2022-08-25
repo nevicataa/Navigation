@@ -28,10 +28,13 @@ class InfoViewController: UIViewController {
 
     private func setupInfoButton() {
             self.view.addSubview(self.infoButton)
-            self.infoButton.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -80).isActive = true
-            self.infoButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 260).isActive = true
-            self.infoButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20).isActive = true
-            self.infoButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+
+        NSLayoutConstraint.activate([
+            self.infoButton.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -80),
+            self.infoButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 260),
+            self.infoButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
+            self.infoButton.heightAnchor.constraint(equalToConstant: 40)
+        ])
         }
 
     @objc private func alertButtonAction(sender: UIButton!) {
