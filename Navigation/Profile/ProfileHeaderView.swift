@@ -23,30 +23,31 @@ class ProfileHeaderView: UIView, UITextFieldDelegate {
     }()
 
     private lazy var nameLabel: UILabel = {
-        let name = UILabel(frame: CGRect(x: 150, y: 105, width: 200, height: 50))
+        let name = UILabel()
         name.text = "Username"
         name.font = UIFont(name: "Halvetica-Bold", size: 18)
+        name.translatesAutoresizingMaskIntoConstraints = false
         return name
     }()
 
     private lazy var statusLabel: UILabel = {
-        let name = UILabel(frame: CGRect(x: 150, y: 135, width: 200, height: 50))
+        let name = UILabel()
         name.text = "Status"
         name.font = UIFont(name: "Halvetica", size: 14)
         name.textColor = UIColor.gray
+        name.translatesAutoresizingMaskIntoConstraints = false
         return name
     }()
 
     private lazy var statusTextField: UITextField = {
-        let textField = UITextField(frame: CGRect(x: 150, y: 185, width: 200, height: 40))
+        let textField = UITextField()
         textField.font = UIFont(name: "Halvetica", size: 15)
         textField.layer.cornerRadius = 12
         textField.layer.borderWidth = 1
         textField.layer.borderColor = UIColor.black.cgColor
         textField.placeholder = "Введите текст статуса"
-
+        textField.translatesAutoresizingMaskIntoConstraints = false
         textField.borderStyle = UITextField.BorderStyle.roundedRect
-        //textField.addTarget(self, action: #selector(statusTextChanged), for: .editingChanged)
         textField.clearButtonMode = .whileEditing
         return textField
     }()
@@ -71,11 +72,8 @@ class ProfileHeaderView: UIView, UITextFieldDelegate {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.addSubview(self.nameLabel)
-        self.addSubview(statusLabel)
-        self.addSubview(statusTextField)
-        setupStatusButton()
-        setupImageView()
+        NSLayoutConstraint.activate(
+            self.setupStatusLabel() + self.setupStatusTextField() + self.setupNameLabel() + self.setupStatusButton() + self.setupImageView())
     }
 
     required init?(coder: NSCoder) {
@@ -85,25 +83,48 @@ class ProfileHeaderView: UIView, UITextFieldDelegate {
     @objc private func statusButton() {
         print(statusLabel.text ?? "Пустой заголовок")
         statusTextField.delegate = self
-        //statusText = statusTextField.text
         statusLabel.text = statusTextField.text
     }
 
-//    @objc private func statusTextChanged() {
-//    }
-
-    private func setupStatusButton() {
-            self.addSubview(showButton)
-            showButton.topAnchor.constraint(equalTo: self.topAnchor, constant: 236).isActive = true
-            showButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16).isActive = true
-            showButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16).isActive = true
-            showButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+    private func setupStatusButton() -> [NSLayoutConstraint] {
+        self.addSubview(showButton)
+        let topAnchor = showButton.topAnchor.constraint(equalTo: self.topAnchor, constant: 136)
+        let leadingAnchor = showButton.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 16)
+        let trailingAnchor = showButton.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -16)
+        let heightAnchor = showButton.heightAnchor.constraint(equalToConstant: 50)
+        return([topAnchor, leadingAnchor, heightAnchor, trailingAnchor])
         }
-    private func setupImageView() {
-            self.addSubview(avatarImageView)
-        avatarImageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 109).isActive = true
-        avatarImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16).isActive = true
-        avatarImageView.heightAnchor.constraint(equalToConstant: 110).isActive = true
-        avatarImageView.widthAnchor.constraint(equalToConstant: 110).isActive = true
+
+    private func setupImageView() -> [NSLayoutConstraint] {
+        self.addSubview(avatarImageView)
+        let topAnchor = avatarImageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 16)
+        let leadingAnchor = avatarImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16)
+        let heightAnchor = avatarImageView.heightAnchor.constraint(equalToConstant: 110)
+        let widthAnchor = avatarImageView.widthAnchor.constraint(equalToConstant: 110)
+        return([topAnchor, leadingAnchor, heightAnchor, widthAnchor])
+        }
+
+    private func setupNameLabel() -> [NSLayoutConstraint] {
+        self.addSubview(nameLabel)
+        let topAnchor = nameLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 15)
+        let leadingAnchor = nameLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 150)
+        let heightAnchor = nameLabel.heightAnchor.constraint(equalToConstant: 50)
+        return([topAnchor, leadingAnchor, heightAnchor])
+        }
+
+    private func setupStatusLabel() -> [NSLayoutConstraint] {
+        self.addSubview(statusLabel)
+        let heightAnchor = statusLabel.heightAnchor.constraint(equalToConstant: 50)
+        let leadingAnchor =  statusLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 150)
+        let topAnchor = statusLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 38)
+        return([topAnchor, leadingAnchor, heightAnchor])
+    }
+
+    private func setupStatusTextField() -> [NSLayoutConstraint] {
+        self.addSubview(statusTextField)
+        let topAnchor = statusTextField.topAnchor.constraint(equalTo: self.topAnchor, constant: 81)
+        let leadingAnchor = statusTextField.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 150)
+        let heightAnchor = statusTextField.heightAnchor.constraint(equalToConstant: 40)
+        return([topAnchor, leadingAnchor, heightAnchor])
         }
 }
