@@ -14,37 +14,6 @@
 
 import UIKit
 
-class CustomTextField: UITextField {
-
-func roundCornerss(corners:UIRectCorner, radius:CGFloat) {
-    let bounds = self.bounds
-
-    let maskPath = UIBezierPath(roundedRect: bounds, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
-
-    let maskLayer = CAShapeLayer()
-    maskLayer.frame = bounds
-    maskLayer.path = maskPath.cgPath
-
-    self.layer.mask = maskLayer
-
-    let frameLayer = CAShapeLayer()
-    frameLayer.frame = bounds
-    frameLayer.path = maskPath.cgPath
-    frameLayer.strokeColor = UIColor.darkGray.cgColor
-    frameLayer.fillColor = UIColor.init(red: 247, green: 247, blue: 247, alpha: 0).cgColor
-
-    self.layer.addSublayer(frameLayer)
-}
-
-func roundTopCornersRadius(radius:CGFloat) {
-    roundCorners(corners: [UIRectCorner.topLeft, UIRectCorner.topRight], radius:radius)
-}
-
-func roundBottomCornersRadius(radius:CGFloat) {
-    roundCorners(corners: [UIRectCorner.bottomLeft, UIRectCorner.bottomRight], radius:radius)
-}
-}
-
 extension UIImage {
     func withAlpha(_ a: CGFloat) -> UIImage {
         return UIGraphicsImageRenderer(size: size, format: imageRendererFormat).image { (_) in
