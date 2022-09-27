@@ -12,19 +12,19 @@ class FeedViewController: UIViewController {
     var post = Post(title: "Пост")
 
     private lazy var firstButton: UIButton = {
-            let button = UIButton()
-            button.backgroundColor = .blue
-            button.layer.cornerRadius = 16
-            button.setTitle("Перейти на пост", for: .normal)
-            button.setTitleColor(.white, for: .normal)
-            button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
-            button.translatesAutoresizingMaskIntoConstraints = false
-            return button
+        let button = UIButton()
+        button.backgroundColor = UIColor(patternImage: UIImage(named: "blue_pixel.png")!)
+        button.layer.cornerRadius = 16
+        button.setTitle("Перейти на пост", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
         }()
 
     private lazy var secondButton: UIButton = {
             let button = UIButton()
-        button.backgroundColor = .blue
+        button.backgroundColor = UIColor(patternImage: UIImage(named: "blue_pixel.png")!)
         button.layer.cornerRadius = 16
         button.setTitle("Перейти на пост", for: .normal)
         button.setTitleColor(.white, for: .normal)
@@ -67,7 +67,6 @@ class FeedViewController: UIViewController {
             let postViewController = PostViewController()
             self.navigationController?.pushViewController(postViewController, animated: true)
             postViewController.titlePost = post.title
-
         }
 
     

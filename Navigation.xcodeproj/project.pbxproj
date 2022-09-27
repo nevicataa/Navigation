@@ -17,6 +17,7 @@
 		C454360028A44E6B00733767 /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45435FF28A44E6900733767 /* PostViewController.swift */; };
 		C454360228A4E08400733767 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = C454360128A4E08400733767 /* Post.swift */; };
 		C454360428A5130800733767 /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C454360328A5130600733767 /* InfoViewController.swift */; };
+		C45A4EC028BD609800B1AF96 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45A4EBF28BD609800B1AF96 /* LogInViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		C45435FF28A44E6900733767 /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
 		C454360128A4E08400733767 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		C454360328A5130600733767 /* InfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
+		C45A4EBF28BD609800B1AF96 /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,6 +52,7 @@
 			children = (
 				C45435FB28A39AA200733767 /* ProfileViewController.swift */,
 				C423B9C128AD13D700365358 /* ProfileHeaderView.swift */,
+				C45A4EBF28BD609800B1AF96 /* LogInViewController.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -159,6 +162,7 @@
 			files = (
 				C45435E628A2EC6600733767 /* AppDelegate.swift in Sources */,
 				C45435FE28A39AF400733767 /* FeedViewController.swift in Sources */,
+				C45A4EC028BD609800B1AF96 /* LogInViewController.swift in Sources */,
 				C45435FC28A39AA200733767 /* ProfileViewController.swift in Sources */,
 				C454360428A5130800733767 /* InfoViewController.swift in Sources */,
 				C454360228A4E08400733767 /* Post.swift in Sources */,
