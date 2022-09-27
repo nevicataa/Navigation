@@ -14,32 +14,52 @@
 
 import UIKit
 
-//extension UIImage {
-//
-//    func alpha(_ value:CGFloat) -> UIImage {
-//        UIGraphicsBeginImageContextWithOptions(size, false, scale)
-//        draw(at: CGPoint.zero, blendMode: .normal, alpha: value)
-//        let newImage = UIGraphicsGetImageFromCurrentImageContext()
-//        UIGraphicsEndImageContext()
-//        return newImage!
-//    }
-//}
+class CustomTextField: UITextField {
 
-//extension UIImage {
-//    func withAlpha(_ a: CGFloat) -> UIImage {
-//        return UIGraphicsImageRenderer(size: size, format: imageRendererFormat).image { (_) in
-//            draw(in: CGRect(origin: .zero, size: size), blendMode: .normal, alpha: a)
-//        }
-//    }
-//}
+func roundCornerss(corners:UIRectCorner, radius:CGFloat) {
+    let bounds = self.bounds
+
+    let maskPath = UIBezierPath(roundedRect: bounds, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
+
+    let maskLayer = CAShapeLayer()
+    maskLayer.frame = bounds
+    maskLayer.path = maskPath.cgPath
+
+    self.layer.mask = maskLayer
+
+    let frameLayer = CAShapeLayer()
+    frameLayer.frame = bounds
+    frameLayer.path = maskPath.cgPath
+    frameLayer.strokeColor = UIColor.darkGray.cgColor
+    frameLayer.fillColor = UIColor.init(red: 247, green: 247, blue: 247, alpha: 0).cgColor
+
+    self.layer.addSublayer(frameLayer)
+}
+
+func roundTopCornersRadius(radius:CGFloat) {
+    roundCorners(corners: [UIRectCorner.topLeft, UIRectCorner.topRight], radius:radius)
+}
+
+func roundBottomCornersRadius(radius:CGFloat) {
+    roundCorners(corners: [UIRectCorner.bottomLeft, UIRectCorner.bottomRight], radius:radius)
+}
+}
+
 extension UIImage {
+    func withAlpha(_ a: CGFloat) -> UIImage {
+        return UIGraphicsImageRenderer(size: size, format: imageRendererFormat).image { (_) in
+            draw(in: CGRect(origin: .zero, size: size), blendMode: .normal, alpha: a)
+        }
+    }
+}
 
-    func alpha(_ value:CGFloat) -> UIImage {
-        UIGraphicsBeginImageContextWithOptions(size, false, scale)
-        draw(at: CGPoint.zero, blendMode: .normal, alpha: value)
-        let newImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return newImage!
+extension UITextField {
+    func roundCorners(corners: UIRectCorner, radius: CGFloat) {
+        let path = UIBezierPath(roundedRect: self.bounds, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
+        let mask = CAShapeLayer()
+        mask.path = path.cgPath
+        self.layer.masksToBounds = true
+        self.layer.mask = mask
     }
 }
 
@@ -53,20 +73,15 @@ class LogInViewController: UIViewController {
         return scrollView
     }()
 
-    private let contentView: UIView = {
-        $0.translatesAutoresizingMaskIntoConstraints = false
-        return $0
-    }(UIView())
-
     private var loginButton: UIButton = {
         let button = UIButton()
         button.layer.cornerRadius = 10
         let backgroundImage = UIImage(named: "blue_pixel.png")!
-        let changedBackgroundImage = UIImage(named: "blue_pixel.png")!.alpha(0.5)
-        button.setImage(backgroundImage, for: .normal)
-        button.setImage(changedBackgroundImage, for: .selected)
-        button.setImage(changedBackgroundImage, for: .disabled)
-        button.setImage(changedBackgroundImage, for: .highlighted)
+        let changedBackgroundImage = UIImage(named: "blue_pixel.png")!.withAlpha(0.8)
+        button.setBackgroundImage(backgroundImage, for: .normal)
+        button.setBackgroundImage(changedBackgroundImage, for: .selected)
+        button.setBackgroundImage(changedBackgroundImage, for: .disabled)
+        button.setBackgroundImage(changedBackgroundImage, for: .highlighted)
         button.titleLabel?.textColor = UIColor.white
         button.backgroundColor = UIColor(patternImage: backgroundImage)
         button.setTitle("Log in", for: .normal)
@@ -88,47 +103,71 @@ class LogInViewController: UIViewController {
 
     private lazy var loginTextField: UITextField = {
         let textField = UITextField()
+        textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 7, height: textField.frame.height))
+        textField.leftViewMode = .always
         textField.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        textField.layer.borderColor = UIColor.systemGray6.cgColor
         textField.backgroundColor = .systemGray6
-        textField.tintColor = .lightGray
+        textField.layer.borderWidth = 0.5
         textField.keyboardType = UIKeyboardType.emailAddress
         textField.placeholder = "Логин"
+        //textField.clipsToBounds = false
+        textField.textColor = .black
         textField.autocapitalizationType = .none
-        textField.borderStyle = .roundedRect
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
 
     private lazy var passwordTextField: UITextField = {
         let textField = UITextField()
+        textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 7, height: textField.frame.height))
+        textField.leftViewMode = .always
         textField.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        textField.layer.borderColor = UIColor.systemGray6.cgColor
+        textField.layer.borderWidth = 0.5
         textField.autocapitalizationType = .none
-        textField.tintColor = .lightGray
+        //textField.clipsToBounds = false
+        //textField.layer.masksToBounds = false
         textField.backgroundColor = .systemGray6
         textField.isSecureTextEntry = true
         textField.placeholder = "Пароль"
-        textField.borderStyle = .roundedRect
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
+    }()
+
+    private var dividerUIView: UIView = {
+        let divider = UIView()
+        divider.translatesAutoresizingMaskIntoConstraints = false
+        divider.backgroundColor = UIColor.lightGray
+        return divider
     }()
 
     private var textFieldsStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.distribution = .fillEqually
         stackView.axis = .vertical
-        stackView.spacing = 0
-        stackView.layer.borderWidth = 1
-        stackView.clipsToBounds = true
-        stackView.layer.borderColor = UIColor.lightGray.cgColor
+        stackView.spacing = 0.5
+        stackView.backgroundColor = .systemGray4
+        stackView.layer.borderWidth = 0.5
+        //stackView.clipsToBounds = true
+        stackView.layer.borderColor = UIColor.systemGray4.cgColor
         stackView.layer.cornerRadius = 10
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
 
+   override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+       self.loginTextField.roundCorners(corners: [.topRight, .topLeft], radius: 10.0)
+       self.passwordTextField.roundCorners(corners: [.bottomRight, .bottomLeft], radius: 10.0)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        setupView()
+        self.navigationController?.navigationBar.isHidden = true
+        self.setupView()
+        self.setupGesture()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -136,8 +175,9 @@ class LogInViewController: UIViewController {
         self.loginTextField.becomeFirstResponder()
     }
 
-    override func viewWillAppear(_ animated: Bool) {
+   override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.navigationBar.isHidden = true
+        super.viewWillAppear(animated)
         notification.addObserver(self,
                                                selector: #selector(didShowKeyboard),
                                                name: UIResponder.keyboardWillShowNotification,
@@ -146,25 +186,16 @@ class LogInViewController: UIViewController {
                                                selector: #selector(didHideKeyboard),
                                                name: UIResponder.keyboardDidHideNotification,
                                                object: nil)
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        self.navigationController?.navigationBar.isHidden = false
-        notification.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
-        notification.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
+   }
 
     private func setupView() {
         self.view.backgroundColor = .systemBackground
 
         view.addSubview(scrollView)
 
-        scrollView.addSubview(contentView)
-
-        contentView.addSubview(logoImageView)
-        contentView.addSubview(textFieldsStackView)
-        contentView.addSubview(loginButton)
+        scrollView.addSubview(logoImageView)
+        scrollView.addSubview(textFieldsStackView)
+        scrollView.addSubview(loginButton)
 
         textFieldsStackView.addArrangedSubview(loginTextField)
         textFieldsStackView.addArrangedSubview(passwordTextField)
@@ -174,57 +205,51 @@ class LogInViewController: UIViewController {
         let scrollViewConstraints = setupScrollView()
         let textFieldsStackViewConstraints = textFieldsStackViewConstraints()
         let loginButtonConstrains = setupLoginButton()
-        let contentViewConstrains = setupContentView()
 
         NSLayoutConstraint.activate(
             logoImageViewContrains +
             textFieldsStackViewConstraints +
             loginButtonConstrains +
-            scrollViewConstraints +
-            contentViewConstrains
+            scrollViewConstraints
         )
     }
 
     private func setupScrollView() -> [NSLayoutConstraint] {
-        let top = scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-        lead = scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-        trail = scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-        bottom = scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        let top = scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+        lead = scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+        trail = scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        bottom = scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         return[bottom, trail, lead, top]
     }
 
-    private func setupContentView() -> [NSLayoutConstraint] {
-        let topAnch = contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-        leadingAnch = contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-        trailingAnch = contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-        bottomAnch = contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-        widthAnch = contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
-        return [topAnch, leadingAnch, trailingAnch, bottomAnch, widthAnch]
-    }
-
-
     private func setupLogoImageView() -> [NSLayoutConstraint] {
-        let topAnchor = logoImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 120)
-        let centerAnchor = logoImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
+        let topAnchor = logoImageView.topAnchor.constraint(equalTo: self.scrollView.topAnchor, constant: 120)
+        let centerAnchor = logoImageView.centerXAnchor.constraint(equalTo: self.scrollView.centerXAnchor)
         let heightAnchor = logoImageView.heightAnchor.constraint(equalToConstant: 100)
         let widthAnchor = logoImageView.widthAnchor.constraint(equalToConstant: 100)
         return([topAnchor, centerAnchor, heightAnchor, widthAnchor])
         }
 
     private func textFieldsStackViewConstraints() -> [NSLayoutConstraint] {
-        let leftAnchor = self.textFieldsStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16)
-        let rightAnchor = self.textFieldsStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
-        let topAnchor = self.textFieldsStackView.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: 120)
-        let heightAnchor = self.textFieldsStackView.heightAnchor.constraint(equalToConstant: 100)
-        return [topAnchor, leftAnchor, rightAnchor, heightAnchor]
+        let leftAnchor = self.textFieldsStackView.leftAnchor.constraint(equalTo: self.scrollView.safeAreaLayoutGuide.leftAnchor, constant: 16)
+        let rightAnchor = self.textFieldsStackView.rightAnchor.constraint(equalTo: self.scrollView.safeAreaLayoutGuide.rightAnchor, constant: -16)
+        let topAnchor = self.textFieldsStackView.topAnchor.constraint(equalTo: self.logoImageView.bottomAnchor, constant: 120)
+        let loginHeightAnchor = self.loginTextField.heightAnchor.constraint(equalToConstant: 50)
+        let passwordHeightAnchor = self.passwordTextField.heightAnchor.constraint(equalToConstant: 50)
+        let passwordRightAnchor = self.passwordTextField.rightAnchor.constraint(equalTo: self.textFieldsStackView.rightAnchor)
+        let loginRightAnchor = self.loginTextField.rightAnchor.constraint(equalTo: self.textFieldsStackView.rightAnchor)
+        let passwordLeftAnchor = self.passwordTextField.leftAnchor.constraint(equalTo: self.textFieldsStackView.leftAnchor)
+        let loginLeftAnchort = self.loginTextField.leftAnchor.constraint(equalTo: self.textFieldsStackView.leftAnchor)
+
+        return [topAnchor, leftAnchor, rightAnchor, loginHeightAnchor, passwordHeightAnchor, passwordLeftAnchor, loginLeftAnchort, passwordRightAnchor, loginRightAnchor]
     }
 
     private func setupLoginButton() -> [NSLayoutConstraint] {
         let topAnchor = loginButton.topAnchor.constraint(equalTo: self.textFieldsStackView.bottomAnchor, constant: 16)
-        let leadingAnchor = loginButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16)
-        let trailingAnchor = loginButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
+        let leadingAnchor = loginButton.leadingAnchor.constraint(equalTo: self.scrollView.safeAreaLayoutGuide.leadingAnchor, constant: 16)
+        let trailingAnchor = loginButton.trailingAnchor.constraint(equalTo: self.scrollView.safeAreaLayoutGuide.trailingAnchor, constant: -16)
         let heightAnchor = loginButton.heightAnchor.constraint(equalToConstant: 50)
-        let bottomAnchor = loginButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16)
+        let bottomAnchor = loginButton.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor, constant: 100)
         return([topAnchor, leadingAnchor, heightAnchor, trailingAnchor, bottomAnchor])
         }
 
@@ -232,12 +257,32 @@ class LogInViewController: UIViewController {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             scrollView.contentInset.bottom = keyboardSize.height + 80
             scrollView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardSize.height, right: 0)
+            let keyboardRectangle = keyboardSize
+            let keyboardHeight = keyboardRectangle.height
+
+            let loginButtonBottomPointY = self.loginButton.frame.origin.y + 50
+            let keyboardOriginY = self.view.frame.height - keyboardHeight
+
+            let offset = keyboardOriginY <= loginButtonBottomPointY
+            ? loginButtonBottomPointY - keyboardOriginY + 16
+            : 0
+
+            self.scrollView.contentOffset = CGPoint(x: 0, y: offset)
         }
     }
 
     @objc private func didHideKeyboard(notification: Notification) {
-        scrollView.contentInset = .zero
-        scrollView.verticalScrollIndicatorInsets = .zero
+        self.hideKeyboard()
+    }
+
+    private func setupGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        self.view.addGestureRecognizer(tapGesture)
+    }
+
+    @objc private func hideKeyboard() {
+        self.view.endEditing(true)
+        self.scrollView.setContentOffset(.zero, animated: true)
     }
 
     @objc private func loginAction() {
