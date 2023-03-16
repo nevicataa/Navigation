@@ -15,7 +15,7 @@ class ProfileHeaderView: UIView, UITextFieldDelegate {
         let image = UIImageView()
         image.layer.cornerRadius = 55
         image.clipsToBounds = true
-        image.backgroundColor = .systemBlue
+        image.backgroundColor = UIColor(patternImage: UIImage(named: "blue_pixel.png")!)
         image.layer.borderWidth = 3
         image.layer.borderColor = UIColor.white.cgColor
         image.translatesAutoresizingMaskIntoConstraints = false
@@ -56,14 +56,10 @@ class ProfileHeaderView: UIView, UITextFieldDelegate {
         let button = UIButton()
         button.layer.cornerRadius = 16
         button.titleLabel?.textColor = UIColor.white
-        button.backgroundColor = .blue
+        button.backgroundColor = UIColor(patternImage: UIImage(named: "blue_pixel.png")!)
         button.setTitle("Show status", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
-        button.layer.shadowColor = UIColor.black.cgColor
-        button.layer.shadowOffset = CGSize(width: 4.0, height: 4.0)
-        button.layer.shadowOpacity = 0.7
-        button.layer.shadowRadius = 4.0
         button.layer.masksToBounds = false
         button.addTarget(self, action: #selector(statusButton), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -97,8 +93,8 @@ class ProfileHeaderView: UIView, UITextFieldDelegate {
 
     private func setupImageView() -> [NSLayoutConstraint] {
         self.addSubview(avatarImageView)
-        let topAnchor = avatarImageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 16)
-        let leadingAnchor = avatarImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16)
+        let topAnchor = avatarImageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 18)
+        let leadingAnchor = avatarImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 14)
         let heightAnchor = avatarImageView.heightAnchor.constraint(equalToConstant: 110)
         let widthAnchor = avatarImageView.widthAnchor.constraint(equalToConstant: 110)
         return([topAnchor, leadingAnchor, heightAnchor, widthAnchor])
@@ -107,7 +103,7 @@ class ProfileHeaderView: UIView, UITextFieldDelegate {
     private func setupNameLabel() -> [NSLayoutConstraint] {
         self.addSubview(nameLabel)
         let topAnchor = nameLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 15)
-        let leadingAnchor = nameLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 150)
+        let leadingAnchor = nameLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 145)
         let heightAnchor = nameLabel.heightAnchor.constraint(equalToConstant: 50)
         return([topAnchor, leadingAnchor, heightAnchor])
         }
@@ -115,7 +111,7 @@ class ProfileHeaderView: UIView, UITextFieldDelegate {
     private func setupStatusLabel() -> [NSLayoutConstraint] {
         self.addSubview(statusLabel)
         let heightAnchor = statusLabel.heightAnchor.constraint(equalToConstant: 50)
-        let leadingAnchor =  statusLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 150)
+        let leadingAnchor =  statusLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 145)
         let topAnchor = statusLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 38)
         return([topAnchor, leadingAnchor, heightAnchor])
     }
@@ -123,8 +119,9 @@ class ProfileHeaderView: UIView, UITextFieldDelegate {
     private func setupStatusTextField() -> [NSLayoutConstraint] {
         self.addSubview(statusTextField)
         let topAnchor = statusTextField.topAnchor.constraint(equalTo: self.topAnchor, constant: 81)
-        let leadingAnchor = statusTextField.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 150)
+        let leadingAnchor = statusTextField.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 145)
+        let trailingAnchor = statusTextField.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -16)
         let heightAnchor = statusTextField.heightAnchor.constraint(equalToConstant: 40)
-        return([topAnchor, leadingAnchor, heightAnchor])
+        return([topAnchor, leadingAnchor, heightAnchor, trailingAnchor])
         }
 }
