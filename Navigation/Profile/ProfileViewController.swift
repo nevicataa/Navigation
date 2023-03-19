@@ -9,56 +9,66 @@ import UIKit
 
 class ProfileViewController: UIViewController {
 
-
-    private lazy var profileHeaderView: ProfileHeaderView = {
-        let view = ProfileHeaderView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 150
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.register(ProfileTableHederView.self, forHeaderFooterViewReuseIdentifier: "HeaderView")
+        tableView.register(CustomTableViewCell.self, forCellReuseIdentifier: "CustomCell")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "DefaultCell")
+        return tableView
     }()
-    
-    private lazy var titleButton: UIButton = {
-        let button = UIButton()
-        button.layer.cornerRadius = 16
-        button.titleLabel?.textColor = UIColor.white
-        button.backgroundColor = UIColor(patternImage: UIImage(named: "blue_pixel.png")!)
-        button.setTitle("Edit title", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
-        button.layer.masksToBounds = false
-        button.addTarget(self, action: #selector(titleButtonAction), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-        }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        setupProfileHeaderView()
-        setupTitleButton()
+        setupTableView()
     }
 
-    @objc private func titleButtonAction() {
+
+    private func setupTableView() {
+        self.view.addSubview(self.tableView)
+        
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: self.view.topAnchor),
+            tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+        ])
+        }
+}
+
+extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//        if section == 0 {
+           guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "HeaderView") as? ProfileTableHederView else { return nil }
+            return headerView
+//        }
     }
 
-    private func setupProfileHeaderView() {
-        self.view.addSubview(self.profileHeaderView)
-
-        NSLayoutConstraint.activate([
-            profileHeaderView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
-            profileHeaderView.heightAnchor.constraint(equalTo: view.heightAnchor, constant: 220),
-            profileHeaderView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            profileHeaderView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0)
-        ])
+    func tableView( _ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+            240
         }
 
-    private func setupTitleButton(){
-        self.view.addSubview(titleButton)
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        4
+    }
 
-        NSLayoutConstraint.activate([
-            self.titleButton.heightAnchor.constraint(equalToConstant: 50),
-            self.titleButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
-            self.titleButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
-            self.titleButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50)
-        ])
+    func numberOfSections(in tableView: UITableView) -> Int {
+        1
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "CustomCell", for: indexPath) as? CustomTableViewCell else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "DefaultCell", for: indexPath)
+            return cell
         }
+        
+        let viewModel = postArray[indexPath.row]
+        cell.setup(with: viewModel)
+        return cell
+    }
 }

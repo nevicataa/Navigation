@@ -31,13 +31,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func createFeedViewController() -> UINavigationController {
         let feedViewController = FeedViewController()
         feedViewController.title = "Новости"
-        feedViewController.tabBarItem = UITabBarItem(title: "Новости", image: UIImage(systemName: "doc.richtext"), tag: 0)
+        feedViewController.tabBarItem = UITabBarItem(title: "Новости", image: UIImage(systemName: "doc.plaintext"), tag: 0)
         return UINavigationController(rootViewController: feedViewController)
     }
 
     func createLoginViewController() -> UINavigationController {
         let loginViewController = LogInViewController()
-        loginViewController.tabBarItem = UITabBarItem(title: "Профиль", image: UIImage(systemName: "person.circle"), tag: 1)
+        loginViewController.tabBarItem = UITabBarItem(title: "Профиль", image: UIImage(systemName: "person.fill"), tag: 1)
 
         return UINavigationController(rootViewController: loginViewController)
     }
